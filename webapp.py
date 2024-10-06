@@ -14,7 +14,6 @@ import ast
 import base64
 import dash
 import dash_bootstrap_components as dbc
-import json
 import jsonpickle
 import pygraphviz
 import seaborn as sns
@@ -24,6 +23,10 @@ import prefltlf2pdfa as pp
 from dash import html
 from dash import dcc
 from loguru import logger
+from pathlib import Path
+from datetime import datetime
+
+CUR_DIR = Path(__file__).resolve().parent
 
 # Create dash app
 app = dash.Dash(
@@ -635,6 +638,13 @@ def cb_btn_translate(
         # Define input
         input_dict = generate_input_dict(text_spec, text_alphabet, chklist_options, ddl_semantics, ddl_autocomplete)
         logger.info(f"Input dictionary: {input_dict}")
+
+        # Save input dict
+        current_datetime = datetime.now()
+        filename = current_datetime.strftime("%Y%m%d_%H%M%S")
+        full_filename = f"input_{filename}.prefltlf"
+        with open(CUR_DIR / "inputs" / full_filename, "w") as fh:
+            fh.write(jsonpickle.encode(input_dict, indent=2))
 
         # Input validation
         if not input_dict["spec"]:

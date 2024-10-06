@@ -6,8 +6,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from webapp import server as app
 from loguru import logger
+from pathlib import Path
 
-logger.add(os.path.join("home", "prefltlf", "webapp", "assets", "out", "app.log"), rotation="20 MB")
+CUR_DIR = Path(__file__).resolve().parent
+logger.add(CUR_DIR / "out" / "app.log", rotation="100 MB", level="DEBUG")
 # logger.info(sys.path)
 # logger.info(app.get_asset_url("app.log"))
 
